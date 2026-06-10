@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      security-events: write # WAJIB DITAMBAHKAN agar bisa upload hasil scan ke GitHub Security
+      security-events: write
 
     steps:
       - name: Checkout code
@@ -24,7 +24,7 @@ jobs:
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/web-paris-cafe:latest .
 
       - name: Scan Docker Image (Trivy) 🔒
-        uses: aquasec/trivy-action@master
+        uses: aquasecurity/trivy-action@master
         with:
           image-ref: '${{ secrets.DOCKER_USERNAME }}/web-paris-cafe:latest'
           format: 'sarif'
