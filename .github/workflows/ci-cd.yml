@@ -8,7 +8,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+      pages: write      # Perlu izin ini untuk deploy ke Pages
+      id-token: write   # Perlu izin ini untuk deploy ke Pages
       security-events: write
 
     steps:
@@ -42,7 +44,14 @@ jobs:
       - name: Push ke Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/web-paris-cafe:latest
 
-      - name: Deploy ke GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      # Ganti cara deploy ke GitHub Pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: .
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
